@@ -161,7 +161,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         'prodesc': proDesc,
         'sid': FirebaseAuth.instance.currentUser!.uid,
         'proimages': imagesUrlList,
-        'discount': 0,
+        'discount': discount,
       }).whenComplete(() {
         setState(() {
           processing = false;
@@ -326,18 +326,16 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return null;
+                              } else if (value.isValidDiscount() != true) {
+                                return 'discount is invalid';
                               }
-                              // else if (value.isValidPrice() != true) {
-                              //   return 'price is invalid';
-                              // }
 
                               return null;
                             },
                             onSaved: (value) {
                               discount = int.parse(value!);
                             },
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
+                            keyboardType: TextInputType.number,
                             decoration: textFormDecoration.copyWith(
                               labelText: 'discount',
                               hintText: 'discount .. %',
@@ -509,5 +507,11 @@ extension PriceValidator on String {
   bool isValidPrice() {
     return RegExp(r'^((([1-9][0-9]*[\.]*)||([0][\.]))([0-9]{1,2}))$')
         .hasMatch(this);
+  }
+}
+
+extension DiscountValidator on String {
+  bool isValidDiscount() {
+    return RegExp(r'^([0-9]*)$').hasMatch(this);
   }
 }
