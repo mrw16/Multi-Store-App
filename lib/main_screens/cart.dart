@@ -6,7 +6,6 @@ import 'package:multi_store/minor_screens/place_order.dart';
 import 'package:multi_store/models/cart_model.dart';
 import 'package:multi_store/providers/cart_provider.dart';
 import 'package:multi_store/widgets/appbar_widgets.dart';
-import 'package:multi_store/widgets/yellow_button.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
@@ -109,7 +108,7 @@ class _CartScreenState extends State<CartScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => PlaceOrderScreen(),
+                                builder: (context) => const PlaceOrderScreen(),
                               ),
                             );
                           },

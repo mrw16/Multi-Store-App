@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_store/widgets/appbar_widgets.dart';
-import 'package:multi_store/widgets/yellow_button.dart';
 
 class Balance extends StatelessWidget {
   const Balance({super.key});
@@ -34,10 +33,10 @@ class Balance extends StatelessWidget {
             centerTitle: true,
             elevation: 0,
             backgroundColor: Colors.white,
-            title: AppBarTitle(
+            title: const AppBarTitle(
               title: 'Balance',
             ),
-            leading: AppBarBackButton(),
+            leading: const AppBarBackButton(),
           ),
           body: Center(
             child: Column(

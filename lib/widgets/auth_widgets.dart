@@ -119,11 +119,11 @@ var textFormDecoration = InputDecoration(
     borderRadius: BorderRadius.circular(25),
   ),
   enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.purple, width: 1),
+    borderSide: const BorderSide(color: Colors.purple, width: 1),
     borderRadius: BorderRadius.circular(25),
   ),
   focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.deepPurpleAccent, width: 2),
+    borderSide: const BorderSide(color: Colors.deepPurpleAccent, width: 2),
     borderRadius: BorderRadius.circular(25),
   ),
 );

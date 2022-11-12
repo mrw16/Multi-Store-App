@@ -162,7 +162,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => CartScreen(
+                                          builder: (context) =>
+                                              const CartScreen(
                                             back: AppBarBackButton(),
                                           ),
                                         ),
@@ -194,7 +195,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              CustomerOrders(),
+                                              const CustomerOrders(),
                                         ),
                                       );
                                     },
@@ -227,7 +228,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              WishlistScreen(),
+                                              const WishlistScreen(),
                                         ),
                                       );
                                     },
@@ -336,10 +337,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       await FirebaseAuth
                                                           .instance
                                                           .signOut();
-                                                      Navigator
-                                                          .pushReplacementNamed(
-                                                              context,
-                                                              '/welcome_screen');
+
+                                                      await Future.delayed(
+                                                              const Duration(
+                                                                  microseconds:
+                                                                      100))
+                                                          .whenComplete(() {
+                                                        Navigator.pop(context);
+                                                        Navigator
+                                                            .pushReplacementNamed(
+                                                                context,
+                                                                '/welcome_screen');
+                                                      });
                                                     },
                                                     child: const Text('Yes'),
                                                   ),

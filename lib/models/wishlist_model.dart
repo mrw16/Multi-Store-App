@@ -62,7 +62,7 @@ class WishlistModel extends StatelessWidget {
                                 onPressed: () {
                                   context.read<Wishlist>().removeItem(product);
                                 },
-                                icon: Icon(Icons.delete_forever),
+                                icon: const Icon(Icons.delete_forever),
                               ),
                               const SizedBox(
                                 width: 10,
@@ -86,7 +86,7 @@ class WishlistModel extends StatelessWidget {
                                               product.suppId,
                                             );
                                       },
-                                      icon: Icon(Icons.add_shopping_cart),
+                                      icon: const Icon(Icons.add_shopping_cart),
                                     ),
                             ],
                           ),

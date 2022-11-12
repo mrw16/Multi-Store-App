@@ -224,7 +224,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         widget.proList['instock'] == 0
                             ? const Text(
                                 'this item is out of stock',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: Colors.grey,
                                   fontSize: 16,
                                 ),
@@ -237,7 +237,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   fontSize: 16,
                                 ),
                               ),
-                        ProDetailsHeader(
+                        const ProDetailsHeader(
                           label: '    Item Description    ',
                         ),
                         Text(
@@ -249,7 +249,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             color: Colors.grey.shade800,
                           ),
                         ),
-                        ProDetailsHeader(
+                        const ProDetailsHeader(
                           label: '   Similar  Items   ',
                         ),
                         SizedBox(
@@ -258,12 +258,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             builder: (BuildContext context,
                                 AsyncSnapshot<QuerySnapshot> snapshot) {
                               if (snapshot.hasError) {
-                                return Text('Something went wrong');
+                                return const Text('Something went wrong');
                               }
 
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return Center(
+                                return const Center(
                                   child: CircularProgressIndicator(),
                                 );
                               }

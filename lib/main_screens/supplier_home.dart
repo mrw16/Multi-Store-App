@@ -2,7 +2,6 @@ import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_store/main_screens/category.dart';
 import 'package:multi_store/main_screens/dashboard.dart';
 import 'package:multi_store/main_screens/home.dart';

@@ -237,8 +237,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                   value: mainCategValue,
                                   items: maincateg.map((value) {
                                     return DropdownMenuItem(
-                                      child: Text(value),
                                       value: value,
+                                      child: Text(value),
                                     );
                                   }).toList(),
                                   onChanged: (value) {
@@ -265,8 +265,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                   value: subCategValue,
                                   items: subCategList.map((value) {
                                     return DropdownMenuItem(
-                                      child: Text(value),
                                       value: value,
+                                      child: Text(value),
                                     );
                                   }).toList(),
                                   onChanged: (value) {

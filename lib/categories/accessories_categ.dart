@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:multi_store/minor_screens/subcateg_products.dart';
 import 'package:multi_store/utilities/categ_list.dart';
 import 'package:multi_store/widgets/categ_widgets.dart';
 
@@ -21,7 +20,7 @@ class AccessoriesCategory extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CategHeaderLabel(
+                  const CategHeaderLabel(
                     headerLabel: 'Accessories',
                   ),
                   SizedBox(
@@ -48,7 +47,7 @@ class AccessoriesCategory extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
+          const Positioned(
             bottom: 0,
             right: 0,
             child: SliderBar(

@@ -18,7 +18,7 @@ class SupplierOrderModel extends StatelessWidget {
         ),
         child: ExpansionTile(
           title: Container(
-            constraints: BoxConstraints(
+            constraints: const BoxConstraints(
               maxHeight: 80,
             ),
             width: double.infinity,

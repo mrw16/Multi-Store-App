@@ -78,6 +78,10 @@ class _SupplierRegisterState extends State<SupplierRegister> {
     }
   }
 
+  void navigate() {
+    Navigator.pushReplacementNamed(context, '/supplier_login');
+  }
+
   void signUp() async {
     setState(() {
       processing = true;
@@ -110,7 +114,7 @@ class _SupplierRegisterState extends State<SupplierRegister> {
             _imageFile = null;
           });
 
-          Navigator.pushReplacementNamed(context, '/supplier_login');
+          navigate();
         } on FirebaseAuthException catch (e) {
           if (e.code == 'weak-password') {
             setState(() {

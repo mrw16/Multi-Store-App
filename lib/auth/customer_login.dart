@@ -1,8 +1,4 @@
 // ignore_for_file: avoid_print
-
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store/widgets/auth_widgets.dart';
@@ -25,6 +21,10 @@ class _CustomerLoginState extends State<CustomerLogin> {
       GlobalKey<ScaffoldMessengerState>();
   bool passwordVisible = false;
 
+  void navigate() {
+    Navigator.pushReplacementNamed(context, '/customer_home');
+  }
+
   void logIn() async {
     setState(() {
       processing = true;
@@ -36,7 +36,7 @@ class _CustomerLoginState extends State<CustomerLogin> {
 
         _formKey.currentState!.reset();
 
-        Navigator.pushReplacementNamed(context, '/customer_home');
+        navigate();
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           setState(() {
@@ -80,7 +80,7 @@ class _CustomerLoginState extends State<CustomerLogin> {
                       const AuthHeaderLabel(
                         headerLabel: 'Log In',
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
                       Padding(

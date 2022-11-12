@@ -14,7 +14,7 @@ class StoresScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         backgroundColor: Colors.white,
-        title: AppBarTitle(title: 'Stores'),
+        title: const AppBarTitle(title: 'Stores'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

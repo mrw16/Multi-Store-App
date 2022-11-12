@@ -8,7 +8,6 @@ import 'package:multi_store/categories/kids_categ.dart';
 import 'package:multi_store/categories/men_categ.dart';
 import 'package:multi_store/categories/shoes_categ.dart';
 import 'package:multi_store/categories/women_categ.dart';
-import 'package:multi_store/utilities/categ_list.dart';
 import 'package:multi_store/widgets/fake_search.dart';
 
 List<ItemsData> items = [

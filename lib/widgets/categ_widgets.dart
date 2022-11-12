@@ -28,7 +28,7 @@ class SliderBar extends StatelessWidget {
               children: [
                 maincategName == 'beauty'
                     ? const Text('')
-                    : Text(
+                    : const Text(
                         ' << ',
                         style: style,
                       ),
@@ -38,7 +38,7 @@ class SliderBar extends StatelessWidget {
                 ),
                 maincategName == 'men'
                     ? const Text('')
-                    : Text(
+                    : const Text(
                         ' >> ',
                         style: style,
                       )
@@ -118,7 +118,7 @@ class CategHeaderLabel extends StatelessWidget {
       padding: const EdgeInsets.all(30.0),
       child: Text(
         headerLabel,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
           letterSpacing: 1.5,

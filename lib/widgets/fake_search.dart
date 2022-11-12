@@ -26,9 +26,9 @@ class FakeSeach extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
-              children: [
+              children: const [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Icon(
                     Icons.search,
                     color: Colors.grey,
@@ -50,7 +50,7 @@ class FakeSeach extends StatelessWidget {
                 color: Colors.yellow,
                 borderRadius: BorderRadius.circular(25),
               ),
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Search',
                   style: TextStyle(

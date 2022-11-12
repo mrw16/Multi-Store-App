@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -215,7 +217,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       FontAwesomeIcons.paypal,
                                       color: Colors.blue,
                                     ),
-                                    const SizedBox(
+                                    SizedBox(
                                       width: 15,
                                     ),
                                     Icon(
@@ -252,7 +254,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   children: [
                                     Text(
                                       'Pay At Home ${totalPaid.toStringAsFixed(2)} \$',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 24,
                                       ),
                                     ),
@@ -310,11 +312,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                             });
                                           });
                                         }
-                                        context.read<Cart>().clearCart();
-                                        Navigator.popUntil(
-                                          context,
-                                          ModalRoute.withName('/customer_home'),
-                                        );
+                                        await Future.delayed(const Duration(
+                                                microseconds: 100))
+                                            .whenComplete(() {
+                                          context.read<Cart>().clearCart();
+                                          Navigator.popUntil(
+                                            context,
+                                            ModalRoute.withName(
+                                                '/customer_home'),
+                                          );
+                                        });
                                       },
                                       width: 0.9,
                                     ),

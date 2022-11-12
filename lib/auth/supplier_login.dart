@@ -22,6 +22,10 @@ class _SupplierLoginState extends State<SupplierLogin> {
       GlobalKey<ScaffoldMessengerState>();
   bool passwordVisible = false;
 
+  void navigate() {
+    Navigator.pushReplacementNamed(context, '/supplier_home');
+  }
+
   void logIn() async {
     setState(() {
       processing = true;
@@ -33,7 +37,7 @@ class _SupplierLoginState extends State<SupplierLogin> {
 
         _formKey.currentState!.reset();
 
-        Navigator.pushReplacementNamed(context, '/supplier_home');
+        navigate();
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           setState(() {
@@ -77,7 +81,7 @@ class _SupplierLoginState extends State<SupplierLogin> {
                       const AuthHeaderLabel(
                         headerLabel: 'Log In',
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
                       Padding(

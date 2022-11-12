@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store/galleries/accessories_gallery.dart';
 import 'package:multi_store/galleries/bags_gallery.dart';
@@ -11,7 +10,6 @@ import 'package:multi_store/galleries/kids_gallery.dart';
 import 'package:multi_store/galleries/men_gallery.dart';
 import 'package:multi_store/galleries/shoes_gallery.dart';
 import 'package:multi_store/galleries/women_gallery.dart';
-import 'package:multi_store/minor_screens/search.dart';
 import 'package:multi_store/widgets/fake_search.dart';
 
 class HomeScreen extends StatefulWidget {

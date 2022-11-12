@@ -38,10 +38,10 @@ class Statics extends StatelessWidget {
             centerTitle: true,
             elevation: 0,
             backgroundColor: Colors.white,
-            title: AppBarTitle(
+            title: const AppBarTitle(
               title: 'Statics',
             ),
-            leading: AppBarBackButton(),
+            leading: const AppBarBackButton(),
           ),
           body: Center(
             child: Column(

@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:multi_store/main_screens/supplier_home.dart';
 import 'package:multi_store/widgets/yellow_button.dart';
 
 const textColors = [
@@ -40,7 +39,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   void initState() {
     _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 2));
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
     _controller.repeat();
     super.initState();
   }
@@ -263,8 +262,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                   });
                                 });
 
-                                Navigator.pushReplacementNamed(
-                                    context, '/customer_home');
+                                await Future.delayed(
+                                        const Duration(microseconds: 100))
+                                    .whenComplete(() =>
+                                        Navigator.pushReplacementNamed(
+                                            context, '/customer_home'));
                               },
                               child: const Icon(
                                 Icons.person,
@@ -337,7 +339,7 @@ class GoogleFacebookLogIn extends StatelessWidget {
             ),
             Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
               ),
             ),
