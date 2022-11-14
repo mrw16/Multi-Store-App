@@ -16,6 +16,7 @@ import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:collection/collection.dart';
 import 'package:badges/badges.dart';
+import 'package:expandable/expandable.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final dynamic proList;
@@ -30,6 +31,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       .collection('products')
       .where('maincateg', isEqualTo: widget.proList['maincateg'])
       .where('subcateg', isEqualTo: widget.proList['subcateg'])
+      .snapshots();
+
+  late final Stream<QuerySnapshot> reviewsStream = FirebaseFirestore.instance
+      .collection('products')
+      .doc(widget.proList['proid'])
+      .collection('reviews')
       .snapshots();
 
   late var existingItemWishlist = context
@@ -249,6 +256,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             color: Colors.grey.shade800,
                           ),
                         ),
+                        Stack(
+                          children: [
+                            Positioned(
+                              right: 50,
+                              top: 15,
+                              child: Text('total'),
+                            ),
+                            ExpandableTheme(
+                              data: const ExpandableThemeData(
+                                iconColor: Colors.blue,
+                                iconSize: 30,
+                              ),
+                              child: reviews(reviewsStream),
+                            ),
+                          ],
+                        ),
                         const ProDetailsHeader(
                           label: '   Similar  Items   ',
                         ),
@@ -440,4 +463,87 @@ class ProDetailsHeader extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget reviews(var reviewsStream) {
+  return ExpandablePanel(
+    header: const Padding(
+      padding: EdgeInsets.all(10),
+      child: Text(
+        'Reviews',
+        style: TextStyle(
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+          color: Colors.blue,
+        ),
+      ),
+    ),
+    collapsed: SizedBox(
+      height: 230,
+      child: reviewsAll(reviewsStream),
+    ),
+    expanded: reviewsAll(reviewsStream),
+  );
+}
+
+Widget reviewsAll(var reviewsStream) {
+  return StreamBuilder<QuerySnapshot>(
+    stream: reviewsStream,
+    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot2) {
+      if (snapshot2.hasError) {
+        return const Text('Something went wrong');
+      }
+
+      if (snapshot2.connectionState == ConnectionState.waiting) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      if (snapshot2.data!.docs.isEmpty) {
+        return Center(
+          child: Text(
+            'This Item \n\n has no Reviews yet!',
+            style: GoogleFonts.acme(
+              fontSize: 26,
+              color: Colors.blueGrey,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.5,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        );
+      }
+
+      return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: snapshot2.data!.docs.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundImage:
+                  NetworkImage(snapshot2.data!.docs[index]['profileimage']),
+            ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(snapshot2.data!.docs[index]['name']),
+                Row(
+                  children: [
+                    Text(snapshot2.data!.docs[index]['rate'].toString()),
+                    const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            subtitle: Text(snapshot2.data!.docs[index]['comment']),
+          );
+        },
+      );
+    },
+  );
 }
