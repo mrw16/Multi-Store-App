@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:multi_store/minor_screens/edit_store.dart';
 import 'package:multi_store/models/product_model.dart';
 import 'package:multi_store/widgets/appbar_widgets.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
@@ -56,10 +57,15 @@ class _VisitStoreState extends State<VisitStore> {
             appBar: AppBar(
               leading: const YellowBackButton(),
               toolbarHeight: 150,
-              flexibleSpace: Image.asset(
-                'images/inapp/coverimage.jpg',
-                fit: BoxFit.cover,
-              ),
+              flexibleSpace: data['coverimage'] == ''
+                  ? Image.asset(
+                      'images/inapp/coverimage.jpg',
+                      fit: BoxFit.cover,
+                    )
+                  : Image.network(
+                      data['coverimage'],
+                      fit: BoxFit.cover,
+                    ),
               title: Row(
                 children: [
                   SizedBox(
@@ -106,7 +112,16 @@ class _VisitStoreState extends State<VisitStore> {
                                   borderRadius: BorderRadius.circular(25),
                                 ),
                                 child: MaterialButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EditStore(
+                                          data: data,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
