@@ -333,7 +333,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                               return null;
                             },
                             onSaved: (value) {
-                              discount = int.parse(value!);
+                              value!.isEmpty ? null : discount = int.parse(value);
                             },
                             keyboardType: TextInputType.number,
                             decoration: textFormDecoration.copyWith(

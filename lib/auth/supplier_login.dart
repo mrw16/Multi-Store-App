@@ -1,9 +1,11 @@
 // ignore_for_file: avoid_print
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store/widgets/auth_widgets.dart';
 import 'package:multi_store/widgets/snackbar.dart';
+import 'package:multi_store/widgets/yellow_button.dart';
 
 class SupplierLogin extends StatefulWidget {
   const SupplierLogin({super.key});
@@ -21,10 +23,7 @@ class _SupplierLoginState extends State<SupplierLogin> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
   bool passwordVisible = false;
-
-  void navigate() {
-    Navigator.pushReplacementNamed(context, '/supplier_home');
-  }
+  bool sendEmailVerification = false;
 
   void logIn() async {
     setState(() {
@@ -34,10 +33,22 @@ class _SupplierLoginState extends State<SupplierLogin> {
       try {
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
+        await FirebaseAuth.instance.currentUser!.reload();
+        if (FirebaseAuth.instance.currentUser!.emailVerified) {
+          _formKey.currentState!.reset();
 
-        _formKey.currentState!.reset();
-
-        navigate();
+          await Future.delayed(const Duration(milliseconds: 100))
+              .whenComplete(() {
+            Navigator.pushReplacementNamed(context, '/supplier_home');
+          });
+        } else {
+          MyMessageHandler.showSnackBar(
+              _scaffoldKey, 'please check your inbox');
+          setState(() {
+            processing = false;
+            sendEmailVerification = true;
+          });
+        }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           setState(() {
@@ -81,8 +92,33 @@ class _SupplierLoginState extends State<SupplierLogin> {
                       const AuthHeaderLabel(
                         headerLabel: 'Log In',
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 50,
+                        child: sendEmailVerification == true
+                            ? Center(
+                                child: YellowButton(
+                                  label: 'Resend Email Verification',
+                                  onPressed: () async {
+                                    try {
+                                      await FirebaseAuth.instance.currentUser!
+                                          .sendEmailVerification();
+                                    } catch (e) {
+                                      print(e);
+                                    }
+
+                                    Future.delayed(const Duration(seconds: 3))
+                                        .whenComplete(
+                                      () {
+                                        setState(() {
+                                          sendEmailVerification = false;
+                                        });
+                                      },
+                                    );
+                                  },
+                                  width: 0.6,
+                                ),
+                              )
+                            : const SizedBox(),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
