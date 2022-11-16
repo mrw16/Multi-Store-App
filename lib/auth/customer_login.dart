@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store/providers/auth_repo.dart';
 import 'package:multi_store/widgets/auth_widgets.dart';
 import 'package:multi_store/widgets/snackbar.dart';
 
@@ -31,26 +32,23 @@ class _CustomerLoginState extends State<CustomerLogin> {
     });
     if (_formKey.currentState!.validate()) {
       try {
-        await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: email, password: password);
+        await AuthRepo.signInWithEmailAndPassword(email, password);
 
-        _formKey.currentState!.reset();
+        await AuthRepo.reloadUserData();
 
-        navigate();
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          setState(() {
-            processing = false;
-          });
+        if (await AuthRepo.checkEmailVerification()) {
+          _formKey.currentState!.reset();
+
+          navigate();
+        } else {
           MyMessageHandler.showSnackBar(
-              _scaffoldKey, 'No user found for that email.');
-        } else if (e.code == 'wrong-password') {
-          setState(() {
-            processing = false;
-          });
-          MyMessageHandler.showSnackBar(
-              _scaffoldKey, 'Wrong password provided for that user.');
+              _scaffoldKey, 'please check your inbox');
         }
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          processing = false;
+        });
+        MyMessageHandler.showSnackBar(_scaffoldKey, e.message.toString());
       }
     } else {
       setState(() {

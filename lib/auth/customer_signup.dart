@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store/providers/auth_repo.dart';
 import 'package:multi_store/widgets/auth_widgets.dart';
 import 'package:multi_store/widgets/snackbar.dart';
 import 'package:image_picker/image_picker.dart';
@@ -85,15 +86,14 @@ class _CustomerRegisterState extends State<CustomerRegister> {
     if (_formKey.currentState!.validate()) {
       if (_imageFile != null) {
         try {
-          await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(email: email, password: password);
+          await AuthRepo.signUpWithEmailAndPassword(email, password);
 
           firebase_storage.Reference ref = firebase_storage
               .FirebaseStorage.instance
               .ref('cust-images/$email.jpg');
 
           await ref.putFile(File(_imageFile!.path));
-          _uid = FirebaseAuth.instance.currentUser!.uid;
+          _uid = AuthRepo.uid;
 
           profileImage = await ref.getDownloadURL();
           await customers.doc(_uid).set({
@@ -113,17 +113,10 @@ class _CustomerRegisterState extends State<CustomerRegister> {
           await Future.delayed(const Duration(microseconds: 100)).whenComplete(
               () => Navigator.pushReplacementNamed(context, '/customer_login'));
         } on FirebaseAuthException catch (e) {
-          if (e.code == 'weak-password') {
-            setState(() {
-              processing = false;
-            });
-            MyMessageHandler.showSnackBar(_scaffoldKey, e.message!);
-          } else if (e.code == 'email-already-in-use') {
-            setState(() {
-              processing = false;
-            });
-            MyMessageHandler.showSnackBar(_scaffoldKey, e.message!);
-          }
+          setState(() {
+            processing = false;
+          });
+          MyMessageHandler.showSnackBar(_scaffoldKey, e.message!);
         }
       } else {
         setState(() {

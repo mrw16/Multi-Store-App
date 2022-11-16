@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store/providers/auth_repo.dart';
 import 'package:multi_store/widgets/auth_widgets.dart';
 import 'package:multi_store/widgets/snackbar.dart';
 import 'package:image_picker/image_picker.dart';
@@ -89,26 +90,21 @@ class _SupplierRegisterState extends State<SupplierRegister> {
     if (_formKey.currentState!.validate()) {
       if (_imageFile != null) {
         try {
-          await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(email: email, password: password);
+          await AuthRepo.signUpWithEmailAndPassword(email, password);
 
-          try {
-            await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-          } catch (e) {
-            print(e);
-          }
+          AuthRepo.sendEmailVerification();
 
           firebase_storage.Reference ref = firebase_storage
               .FirebaseStorage.instance
               .ref('supp-images/$email.jpg');
 
           await ref.putFile(File(_imageFile!.path));
-          _uid = FirebaseAuth.instance.currentUser!.uid;
+          _uid = AuthRepo.uid;
 
           storeLogo = await ref.getDownloadURL();
 
-          await FirebaseAuth.instance.currentUser!.updateDisplayName(storeName);
-          await FirebaseAuth.instance.currentUser!.updatePhotoURL(storeLogo);
+          AuthRepo.updateUserName(storeName);
+          AuthRepo.updateProfileImage(storeLogo);
 
           await suppliers.doc(_uid).set({
             'storename': storeName,
@@ -126,17 +122,11 @@ class _SupplierRegisterState extends State<SupplierRegister> {
 
           navigate();
         } on FirebaseAuthException catch (e) {
-          if (e.code == 'weak-password') {
-            setState(() {
-              processing = false;
-            });
-            MyMessageHandler.showSnackBar(_scaffoldKey, e.message!);
-          } else if (e.code == 'email-already-in-use') {
-            setState(() {
-              processing = false;
-            });
-            MyMessageHandler.showSnackBar(_scaffoldKey, e.message!);
-          }
+          setState(() {
+            processing = false;
+          });
+
+          MyMessageHandler.showSnackBar(_scaffoldKey, e.message!);
         }
       } else {
         setState(() {

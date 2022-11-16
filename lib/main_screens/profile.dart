@@ -6,6 +6,7 @@ import 'package:multi_store/customer_screens/address_book.dart';
 import 'package:multi_store/customer_screens/customer_orders.dart';
 import 'package:multi_store/customer_screens/wishlist.dart';
 import 'package:multi_store/main_screens/cart.dart';
+import 'package:multi_store/providers/auth_repo.dart';
 import 'package:multi_store/widgets/appbar_widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -351,9 +352,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     isDestructiveAction: true,
                                                     onPressed: () async {
                                                       // Navigator.pop(context);
-                                                      await FirebaseAuth
-                                                          .instance
-                                                          .signOut();
+                                                      await AuthRepo.logOut();
 
                                                       await Future.delayed(
                                                               const Duration(

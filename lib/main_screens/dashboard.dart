@@ -8,6 +8,7 @@ import 'package:multi_store/dashboard_components/supp_balance.dart';
 import 'package:multi_store/dashboard_components/supp_orders.dart';
 import 'package:multi_store/dashboard_components/supp_statics.dart';
 import 'package:multi_store/main_screens/visit_store.dart';
+import 'package:multi_store/providers/auth_repo.dart';
 import 'package:multi_store/widgets/appbar_widgets.dart';
 
 List<String> label = [
@@ -70,7 +71,7 @@ class DashboardScreen extends StatelessWidget {
                       isDestructiveAction: true,
                       onPressed: () async {
                         // Navigator.pop(context);
-                        await FirebaseAuth.instance.signOut();
+                        await AuthRepo.logOut();
                         await Future.delayed(const Duration(microseconds: 100))
                             .whenComplete(() {
                           Navigator.pop(context);
