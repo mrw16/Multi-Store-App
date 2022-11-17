@@ -88,6 +88,8 @@ class _CustomerRegisterState extends State<CustomerRegister> {
         try {
           await AuthRepo.signUpWithEmailAndPassword(email, password);
 
+          AuthRepo.sendEmailVerification();
+
           firebase_storage.Reference ref = firebase_storage
               .FirebaseStorage.instance
               .ref('cust-images/$email.jpg');

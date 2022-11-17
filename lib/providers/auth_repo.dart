@@ -24,7 +24,7 @@ class AuthRepo {
 
   static get uid {
     User user = FirebaseAuth.instance.currentUser!;
-    user.uid;
+    return user.uid;
   }
 
   static Future<void> updateUserName(displayName) async {
@@ -57,5 +57,14 @@ class AuthRepo {
   static Future<void> logOut() async {
     final auth = FirebaseAuth.instance;
     await auth.signOut();
+  }
+
+  static Future<void> sendPasswordResetEmail(email) async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: email);
+    } catch (e) {
+      print(e);
+    }
   }
 }

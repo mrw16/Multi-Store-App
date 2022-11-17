@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store/minor_screens/forgot_password.dart';
 import 'package:multi_store/providers/auth_repo.dart';
 import 'package:multi_store/widgets/auth_widgets.dart';
 import 'package:multi_store/widgets/snackbar.dart';
@@ -41,6 +42,9 @@ class _CustomerLoginState extends State<CustomerLogin> {
 
           navigate();
         } else {
+          setState(() {
+            processing = false;
+          });
           MyMessageHandler.showSnackBar(
               _scaffoldKey, 'please check your inbox');
         }
@@ -139,7 +143,14 @@ class _CustomerLoginState extends State<CustomerLogin> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ForgotPassword(),
+                            ),
+                          );
+                        },
                         child: const Text(
                           'Forgot password ?',
                           style: TextStyle(
