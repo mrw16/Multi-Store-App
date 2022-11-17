@@ -6,6 +6,7 @@ import 'package:multi_store/customer_screens/address_book.dart';
 import 'package:multi_store/customer_screens/customer_orders.dart';
 import 'package:multi_store/customer_screens/wishlist.dart';
 import 'package:multi_store/main_screens/cart.dart';
+import 'package:multi_store/minor_screens/update_password.dart';
 import 'package:multi_store/providers/auth_repo.dart';
 import 'package:multi_store/widgets/appbar_widgets.dart';
 
@@ -325,7 +326,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         RepeatedListTile(
                                           title: 'Change Password',
                                           icon: Icons.lock,
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const UpdatePassword(),
+                                              ),
+                                            );
+                                          },
                                         ),
                                         const YellowDivider(),
                                         RepeatedListTile(
