@@ -1,9 +1,11 @@
 // ignore_for_file: avoid_print
 
 import 'dart:async';
+import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_store/minor_screens/subcateg_products.dart';
+import 'package:multi_store/minor_screens/hot_deals.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -15,10 +17,13 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   Timer? countDownTimer;
   int seconds = 3;
+  List<int> discountList = [];
+  int? maxDiscount;
 
   @override
   void initState() {
     startTimer();
+    getDiscount();
     super.initState();
   }
 
@@ -48,6 +53,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     countDownTimer!.cancel();
   }
 
+  void getDiscount() {
+    FirebaseFirestore.instance.collection('products').get().then(
+      (QuerySnapshot querySnapshot) {
+        for (var doc in querySnapshot.docs) {
+          discountList.add(doc['discount']);
+        }
+      },
+    ).whenComplete(
+      () => setState(
+        () {
+          maxDiscount = discountList.reduce(max);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,17 +79,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               stopTimer();
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
-                  builder: (context) => const SubCategProducts(
-                    subcategName: 't-shirt',
-                    maincategName: 'men',
+                  builder: (context) => HotDealsScreen(
                     fromOnBoarding: true,
+                    maxDiscount: maxDiscount.toString(),
                   ),
                 ),
                 (Route route) => false,
               );
+              // Navigator.of(context).pushAndRemoveUntil(
+              //   MaterialPageRoute(
+              //     builder: (context) => const ShoesGalleryScreen(
+              //       fromOnboarding: true,
+              //     ),
+              //   ),
+              //   (Route route) => false,
+              // );
+              // Navigator.of(context).pushAndRemoveUntil(
+              //   MaterialPageRoute(
+              //     builder: (context) => const SubCategProducts(
+              //       subcategName: 't-shirt',
+              //       maincategName: 'men',
+              //       fromOnBoarding: true,
+              //     ),
+              //   ),
+              //   (Route route) => false,
+              // );
             },
             child: Image.asset(
-              'images/onboard/watches.JPEG',
+              'images/onboard/sale.JPEG',
               fit: BoxFit.cover,
             ),
           ),
