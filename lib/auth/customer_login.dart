@@ -1,10 +1,13 @@
 // ignore_for_file: avoid_print
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:multi_store/minor_screens/forgot_password.dart';
 import 'package:multi_store/providers/auth_repo.dart';
 import 'package:multi_store/widgets/auth_widgets.dart';
 import 'package:multi_store/widgets/snackbar.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class CustomerLogin extends StatefulWidget {
   const CustomerLogin({super.key});
@@ -14,6 +17,55 @@ class CustomerLogin extends StatefulWidget {
 }
 
 class _CustomerLoginState extends State<CustomerLogin> {
+  CollectionReference customers =
+      FirebaseFirestore.instance.collection('customers');
+
+  Future<bool> checkIfDocExists(String docId) async {
+    try {
+      var doc = await customers.doc(docId).get();
+      return doc.exists;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  bool docExists = false;
+
+  Future<UserCredential> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    return await FirebaseAuth.instance
+        .signInWithCredential(credential)
+        .whenComplete(() async {
+      User user = FirebaseAuth.instance.currentUser!;
+      print(googleUser!.id);
+      print(FirebaseAuth.instance.currentUser!.uid);
+      print(googleUser);
+      print(user);
+
+      docExists = await checkIfDocExists(user.uid);
+
+      docExists == false
+          ? await customers.doc(user.uid).set({
+              'name': user.displayName,
+              'email': user.email,
+              'profileimage': user.photoURL,
+              'phone': '',
+              'address': '',
+              'cid': user.uid
+            }).then((value) => navigate())
+          : navigate();
+    });
+  }
+
   late String email;
   late String password;
   bool processing = false;
@@ -181,12 +233,71 @@ class _CustomerLoginState extends State<CustomerLogin> {
                                 logIn();
                               },
                             ),
+                      divider(),
+                      googleLogInButton(),
                     ],
                   ),
                 ),
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget divider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          SizedBox(
+            width: 80,
+            child: Divider(
+              color: Colors.grey,
+              thickness: 1,
+            ),
+          ),
+          Text(
+            '  Or  ',
+            style: TextStyle(color: Colors.grey),
+          ),
+          SizedBox(
+            width: 80,
+            child: Divider(
+              color: Colors.grey,
+              thickness: 1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget googleLogInButton() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(50, 50, 50, 20),
+      child: Material(
+        elevation: 3,
+        color: Colors.grey.shade300,
+        borderRadius: BorderRadius.circular(6),
+        child: MaterialButton(
+          onPressed: () {
+            signInWithGoogle();
+          },
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: const [
+                Icon(
+                  FontAwesomeIcons.google,
+                  color: Colors.red,
+                ),
+                Text(
+                  'Sign In With Google',
+                  style: TextStyle(color: Colors.red, fontSize: 16),
+                )
+              ]),
         ),
       ),
     );

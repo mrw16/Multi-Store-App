@@ -258,7 +258,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                         Stack(
                           children: [
-                            Positioned(
+                            const Positioned(
                               right: 50,
                               top: 15,
                               child: Text('total'),
