@@ -6,6 +6,7 @@ import 'package:multi_store/auth/customer_signup.dart';
 import 'package:multi_store/auth/supplier_login.dart';
 import 'package:multi_store/auth/supplier_signup.dart';
 import 'package:multi_store/main_screens/customer_home.dart';
+import 'package:multi_store/main_screens/onboarding_screen.dart';
 import 'package:multi_store/main_screens/supplier_home.dart';
 import 'package:multi_store/main_screens/welcome_screen.dart';
 import 'package:multi_store/providers/cart_provider.dart';
@@ -43,9 +44,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: WelcomeScreen(),
-      initialRoute: '/welcome_screen',
+      initialRoute: '/onboarding_screen',
       routes: {
         '/welcome_screen': (context) => const WelcomeScreen(),
+        '/onboarding_screen': (context) => const OnboardingScreen(),
         '/customer_home': (context) => const CustomerHomeScreen(),
         '/supplier_home': (context) => const SupplierHomeScreen(),
         '/customer_signup': (context) => const CustomerRegister(),
