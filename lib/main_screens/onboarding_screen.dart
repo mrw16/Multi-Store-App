@@ -5,7 +5,9 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store/galleries/shoes_gallery.dart';
 import 'package:multi_store/minor_screens/hot_deals.dart';
+import 'package:multi_store/minor_screens/subcateg_products.dart';
 
 enum Offer {
   watches,
@@ -28,6 +30,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   late int selectedIndex;
   late String offerName;
   late String assetName;
+  late Offer offer;
 
   @override
   void initState() {
@@ -50,6 +53,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         selectedIndex = random.nextInt(3);
         offerName = Offer.values[selectedIndex].toString();
         assetName = offerName.replaceAll("Offer.", "");
+        offer = Offer.values[selectedIndex];
       });
     }
     print(selectedIndex);
@@ -78,6 +82,52 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     countDownTimer!.cancel();
   }
 
+  Widget buildAsset() {
+    return Image.asset(
+      'images/onboard/$assetName.JPEG',
+      fit: BoxFit.cover,
+    );
+  }
+
+  void navigateToOffer() {
+    switch (offer) {
+      case Offer.watches:
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const SubCategProducts(
+              subcategName: 't-shirt',
+              maincategName: 'men',
+              fromOnBoarding: true,
+            ),
+          ),
+          (Route route) => false,
+        );
+        break;
+      case Offer.shoes:
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const ShoesGalleryScreen(
+              fromOnboarding: true,
+            ),
+          ),
+          (Route route) => false,
+        );
+        break;
+      case Offer.sale:
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => HotDealsScreen(
+              fromOnBoarding: true,
+              maxDiscount: maxDiscount.toString(),
+            ),
+          ),
+          (Route route) => false,
+        );
+        break;
+      // default:
+    }
+  }
+
   void getDiscount() {
     FirebaseFirestore.instance.collection('products').get().then(
       (QuerySnapshot querySnapshot) {
@@ -102,38 +152,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           GestureDetector(
             onTap: () {
               stopTimer();
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (context) => HotDealsScreen(
-                    fromOnBoarding: true,
-                    maxDiscount: maxDiscount.toString(),
-                  ),
-                ),
-                (Route route) => false,
-              );
-              // Navigator.of(context).pushAndRemoveUntil(
-              //   MaterialPageRoute(
-              //     builder: (context) => const ShoesGalleryScreen(
-              //       fromOnboarding: true,
-              //     ),
-              //   ),
-              //   (Route route) => false,
-              // );
-              // Navigator.of(context).pushAndRemoveUntil(
-              //   MaterialPageRoute(
-              //     builder: (context) => const SubCategProducts(
-              //       subcategName: 't-shirt',
-              //       maincategName: 'men',
-              //       fromOnBoarding: true,
-              //     ),
-              //   ),
-              //   (Route route) => false,
-              // );
+              navigateToOffer();
             },
-            child: Image.asset(
-              'images/onboard/$assetName.JPEG',
-              fit: BoxFit.cover,
-            ),
+            child: buildAsset(),
           ),
           Positioned(
             top: 60,
