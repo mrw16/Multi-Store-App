@@ -7,6 +7,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store/minor_screens/hot_deals.dart';
 
+enum Offer {
+  watches,
+  shoes,
+  sale,
+}
+
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -19,9 +25,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int seconds = 3;
   List<int> discountList = [];
   int? maxDiscount;
+  late int selectedIndex;
+  late String offerName;
+  late String assetName;
 
   @override
   void initState() {
+    selectRandomOffer();
     startTimer();
     getDiscount();
     super.initState();
@@ -30,6 +40,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void selectRandomOffer() {
+    // [1= watches, 2=shoes, 3=sale]
+    for (var i = 0; i < Offer.values.length; i++) {
+      var random = Random();
+      setState(() {
+        selectedIndex = random.nextInt(3);
+        offerName = Offer.values[selectedIndex].toString();
+        assetName = offerName.replaceAll("Offer.", "");
+      });
+    }
+    print(selectedIndex);
+    print(offerName);
+    print(assetName);
   }
 
   void startTimer() {
@@ -43,8 +68,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           stopTimer();
           Navigator.pushReplacementNamed(context, '/customer_home');
         }
-        print(timer.tick);
-        print(seconds);
+        // print(timer.tick);
+        // print(seconds);
       },
     );
   }
@@ -106,7 +131,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               // );
             },
             child: Image.asset(
-              'images/onboard/sale.JPEG',
+              'images/onboard/$assetName.JPEG',
               fit: BoxFit.cover,
             ),
           ),
