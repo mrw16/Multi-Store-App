@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_store/galleries/shoes_gallery.dart';
 import 'package:multi_store/minor_screens/hot_deals.dart';
 import 'package:multi_store/minor_screens/subcateg_products.dart';
@@ -35,7 +36,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void initState() {
     selectRandomOffer();
-    startTimer();
+    // startTimer();
     getDiscount();
     super.initState();
   }
@@ -83,9 +84,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget buildAsset() {
-    return Image.asset(
-      'images/onboard/$assetName.JPEG',
-      fit: BoxFit.cover,
+    return SizedBox(
+      width: double.infinity,
+      child: Image.asset(
+        'images/onboard/$assetName.JPEG',
+        fit: BoxFit.cover,
+      ),
     );
   }
 
@@ -178,6 +182,36 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     : Text(
                         'Skip | $seconds',
                       ),
+              ),
+            ),
+          ),
+          offer == Offer.sale
+              ? Positioned(
+                  top: 100,
+                  right: 65,
+                  child: Text(
+                    maxDiscount.toString() + ('%'),
+                    style: GoogleFonts.akayaTelivigala(
+                      fontSize: 100,
+                      color: Colors.amber,
+                    ),
+                  ),
+                )
+              : const SizedBox(),
+          Positioned(
+            bottom: 70,
+            child: Container(
+              height: 70,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.black,
+              child: const Center(
+                child: Text(
+                  'SHOP NOW',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
               ),
             ),
           ),
