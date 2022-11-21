@@ -23,7 +23,8 @@ class OnboardingScreen extends StatefulWidget {
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnboardingScreenState extends State<OnboardingScreen>
+    with SingleTickerProviderStateMixin {
   Timer? countDownTimer;
   int seconds = 3;
   List<int> discountList = [];
@@ -32,17 +33,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   late String offerName;
   late String assetName;
   late Offer offer;
+  late AnimationController _animationController;
+  late Animation<Color?> _colorTweenAnimation;
 
   @override
   void initState() {
     selectRandomOffer();
-    // startTimer();
+    startTimer();
     getDiscount();
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 600));
+
+    _colorTweenAnimation = ColorTween(
+      begin: Colors.black,
+      end: Colors.red,
+    ).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
+    _animationController.repeat();
     super.initState();
   }
 
   @override
   void dispose() {
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -189,21 +204,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ? Positioned(
                   top: 100,
                   right: 65,
-                  child: Text(
-                    maxDiscount.toString() + ('%'),
-                    style: GoogleFonts.akayaTelivigala(
-                      fontSize: 100,
-                      color: Colors.amber,
+                  child: AnimatedOpacity(
+                    duration: const Duration(microseconds: 100),
+                    opacity: _animationController.value,
+                    child: Text(
+                      maxDiscount.toString() + ('%'),
+                      style: GoogleFonts.akayaTelivigala(
+                        fontSize: 100,
+                        color: Colors.amber,
+                      ),
                     ),
                   ),
                 )
               : const SizedBox(),
           Positioned(
             bottom: 70,
-            child: Container(
-              height: 70,
-              width: MediaQuery.of(context).size.width,
-              color: Colors.black,
+            child: AnimatedBuilder(
+              animation: _animationController.view,
+              builder: (context, child) {
+                return Container(
+                  height: 70,
+                  width: MediaQuery.of(context).size.width,
+                  color: _colorTweenAnimation.value,
+                  child: child,
+                );
+              },
               child: const Center(
                 child: Text(
                   'SHOP NOW',
